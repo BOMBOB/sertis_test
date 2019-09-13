@@ -5,5 +5,5 @@ const ENV = process.env.NODE_ENV || 'development';
 const knex = require('knex')(config[ENV]);
 
 const bookshelf = require('bookshelf')(knex);
-
+bookshelf.plugin('pagination');
 module.exports = bookshelf;

@@ -4,7 +4,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const validatorjs = require('validatorjs');
-const { createCard } = require('./services');
+const { createCard, getCard, } = require('./services');
 const app = express()
 app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
@@ -15,9 +15,10 @@ app.get('/', (req, res) => {
     res.send('Hello')
 })
 // GET all cards of author
-app.get('/card', (req, res) => {
+app.get('/card', async  (req, res) => {
     const { body = {} } = req;
-
+    const result = await getCard(body);
+    res.json(result);
 
 })
 app.post('/card', async (req,res) => {

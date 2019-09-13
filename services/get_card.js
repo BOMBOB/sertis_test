@@ -48,6 +48,7 @@ module.exports = async (params) => {
         message: 'SUCCESS',
         code: 200,
         data: cardList.toJSON(),
+        pagination: cardList.pagination
     }
 
 }
