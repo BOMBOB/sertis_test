@@ -4,8 +4,7 @@ const Validation = require('validatorjs');
 const { Card } = require('../models');
 const rules = {
     author: 'required',
-    page: 'integer',
-    page_size: 'integer',
+    id: 'integer',
 }
 
 const validate = (params) => {
@@ -26,19 +25,15 @@ module.exports = async (params) => {
     }
     const { 
         author,
-        page = 1,
-        page_size: pageSize = 10,
+        id,
     } = params;
 
-    const cardList = await new Card().where({ author }).fetchPage({
-        page,
-        pageSize,
-    })
-    console.log('>>cardList: ', cardList);
-    if (cardList.length < 1) {
+    const card = await new Card().where({ id, author }).fetch();
+    console.log('>>card: ', card);
+    if (!card) {
         return {
             success:false,
-            message: 'Not Found card of this author: ' + author,
+            message: `Not Found card of this author: ${author} || id: ${id}`,
             code: 404,
             data: null,
         }
@@ -47,8 +42,7 @@ module.exports = async (params) => {
         success: true,
         message: 'SUCCESS',
         code: 200,
-        data: cardList.toJSON(),
-        pagination: cardList.pagination
+        data: card.toJSON(),
     }
 
 }
