@@ -5,7 +5,7 @@ exports.up = function(knex) {
       t.string('name');
       t.string('author').index();
       t.string('content');
-      t.string('category').index();
+      t.string('category');
       t.string('status');
       t.timestamp('deleted_at');
       t.timestamp('restored_at');
