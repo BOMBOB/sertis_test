@@ -10,39 +10,44 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 
-app.get('/', (req, res) => {
-    console.log(">>Hello world");
-    res.send('Hello')
-})
+// app.get('/', (req, res) => {
+//     console.log(">>Hello world");
+//     res.send('Hello')
+// })
 // GET all cards of author
 app.get('/card', async  (req, res) => {
     const { body = {} } = req;
     const result = await getCard(body);
-    res.json(result);
+    const { code } = result || {}; 
+    res.status(code).json(result);
 
 })
 app.get('/card/:id', async(req, res) => {
     const { body = {}, params = {} } = req;
     const { id } = params;
     const result = await getCardByID({ ...body, id });
-    res.json(result);
+    const { code } = result || {}; 
+    res.status(code).json(result);
 })
 app.post('/card', async (req,res) => {
     const { body = {} } = req;
     const result = await createCard(body);
-    res.json(result);
+    const { code } = result || {}; 
+    res.status(code).json(result);
 })
 app.delete('/card/:id', async(req, res) => {
     const { body = {}, params = {} } = req;
     const { id } = params;
     const result = await deleteCardByID({...body, id });
-    res.json(result);
+    const { code } = result || {}; 
+    res.status(code).json(result);
 })
 app.put('/card/:id', async (req, res) => {
     const { body = {}, params = {} } = req;
     const {id } = params;
     const result = await updateCardByID({...body, id})
-    res.json(result);
+    const { code } = result || {}; 
+    res.status(code).json(result);
 })
 
 app.listen(3000, () => {

@@ -47,7 +47,7 @@ module.exports = async (params) => {
         return {
             success: true,
             message: 'SUCCESS',
-            code: 200,
+            code: 201,
             data: card.toJSON(),
         }
     } catch (error) {

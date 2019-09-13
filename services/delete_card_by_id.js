@@ -29,13 +29,21 @@ module.exports = async (params) => {
     } = params;
 
     try {
-        const card = await new Card().where({ id, author }).fetch();
+        const card = await new Card().where({ id }).fetch();
         console.log('>>card: ', card);
         if (!card) {
             return {
                 success:false,
                 message: `Not Found card of this author: ${author} || id: ${id}`,
                 code: 404,
+                data: null,
+            }
+        }
+        if (card.get('author') !== author) {
+            return {
+                success:false,
+                message: `this author '${author}' is not owner card_id: ${id}`,
+                code: 401,
                 data: null,
             }
         }

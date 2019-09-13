@@ -51,7 +51,7 @@ module.exports = async (params) => {
             return {
                 success:false,
                 message: `this author ${author} is not owner card_id: ${id}`,
-                code: 404,
+                code: 401,
                 data: null,
             }
         }
