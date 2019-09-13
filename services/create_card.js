@@ -14,17 +14,18 @@ const rules = {
 
 const validate = (params) => {
     const validation = new Validation(params, rules)
+    console.log('>>validate error: ', validation)
     return {
         success: validation.passes(),
-        messages: validation.errors
+        messages: validation.errors.all()
     }
 }
 module.exports = async (params) => {
-    const validate = validate(params);
-    if (!validate.success) {
+    const valid = validate(params);
+    if (!valid.success) {
         return {
-            success: validate.success,
-            messages: validate.errors,
+            success: valid.success,
+            messages: valid.messages,
         }
     }
     const { 
@@ -34,20 +35,30 @@ module.exports = async (params) => {
         content = '',
         category = '',
     } = params;
-
-    const card = await new Card({
-        author,
-        name,
-        status,
-        content,
-        category,
-    }).save(null, { method: 'insert' })
-    console.log('>>cardList: ', card);
-    return {
-        success: true,
-        message: 'SUCCESS',
-        code: 200,
-        data: card.toJSON(),
+    try {
+        const card = await new Card({
+            author,
+            name,
+            status,
+            content,
+            category,
+        }).save(null, { method: 'insert' })
+        console.log('>>cardList: ', card);
+        return {
+            success: true,
+            message: 'SUCCESS',
+            code: 200,
+            data: card.toJSON(),
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            success:false,
+            message: error,
+            code: 500,
+            data: null,
+        }
     }
+   
 
 }

@@ -12,15 +12,16 @@ const validate = (params) => {
     const validation = new Validation(params, rules)
     return {
         success: validation.passes(),
-        messages: validation.errors
+        messages: validation.errors.all(),
     }
 }
 module.exports = async (params) => {
-    const validate = validate(params);
-    if (!validate.success) {
+    const valid = validate(params);
+    if (!valid.success) {
         return {
-            success: validate.success,
-            messages: validate.errors,
+            success: valid.success,
+            messages: valid.errors.all(),
+            code: 422,
         }
     }
     const { 
@@ -29,11 +30,19 @@ module.exports = async (params) => {
         page_size: pageSize = 10,
     } = params;
 
-    const cardList = await new Card().where({author}).fetchPage({
+    const cardList = await new Card().where({ author }).fetchPage({
         page,
         pageSize,
     })
     console.log('>>cardList: ', cardList);
+    if (cardList.length < 1) {
+        return {
+            success:false,
+            message: 'Not Found card of this author: ' + author,
+            code: 404,
+            data: null,
+        }
+    }
     return {
         success: true,
         message: 'SUCCESS',
