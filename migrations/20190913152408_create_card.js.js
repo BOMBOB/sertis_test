@@ -8,6 +8,7 @@ exports.up = function(knex) {
       t.string('category').index();
       t.string('status');
       t.timestamp('deleted_at');
+      t.timestamp('restored_at');
       t.timestamps(true, true);
   })
 };
