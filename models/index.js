@@ -1,0 +1,1 @@
+exports.Card = require('./card');
