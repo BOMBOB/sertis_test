@@ -15,6 +15,7 @@ const validate = (params) => {
     }
 }
 module.exports = async (params) => {
+    // validate fn.
     const valid = validate(params);
     if (!valid.success) {
         return {
@@ -27,9 +28,12 @@ module.exports = async (params) => {
         author,
         id,
     } = params;
-
+    try {
+        // Find card in db
     const card = await new Card().where({ id }).fetch();
     console.log('>>card: ', card);
+    
+    // If not found this card id
     if (!card) {
         return {
             success:false,
@@ -51,6 +55,15 @@ module.exports = async (params) => {
         message: 'SUCCESS',
         code: 200,
         data: card.toJSON(),
+    }
+    } catch (error) {
+        console.error(error);
+        return {
+            success:false,
+            message: error,
+            code: 500,
+            data: null,
+        }
     }
 
 }

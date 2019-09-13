@@ -16,6 +16,7 @@ const validate = (params) => {
     }
 }
 module.exports = async (params) => {
+    // validation section
     const valid = validate(params);
     if (!valid.success) {
         return {
@@ -29,12 +30,15 @@ module.exports = async (params) => {
         page = 1,
         page_size: pageSize = 10,
     } = params;
-
+    try {
+        // Find card in db
     const cardList = await new Card().where({ author }).fetchPage({
         page,
         pageSize,
     })
+
     console.log('>>cardList: ', cardList);
+    // Check if not found any card.
     if (cardList.length < 1) {
         return {
             success:false,
@@ -49,6 +53,15 @@ module.exports = async (params) => {
         code: 200,
         data: cardList.toJSON(),
         pagination: cardList.pagination
+    }
+    } catch (error) {
+        console.error(error);
+        return {
+            success:false,
+            message: error,
+            code: 500,
+            data: null,
+        }
     }
 
 }

@@ -2,6 +2,7 @@
 
 const Validation = require('validatorjs');
 const { Card } = require('../models');
+// Validation Rule
 const rules = {
     author: 'required',
     id: 'integer',
@@ -10,7 +11,7 @@ const rules = {
     content: 'required',
     category: 'required',
 }
-
+// Validate fn.
 const validate = (params) => {
     const validation = new Validation(params, rules)
     return {
@@ -18,6 +19,7 @@ const validate = (params) => {
         messages: validation.errors.all(),
     }
 }
+// Main fn.
 module.exports = async (params) => {
     const valid = validate(params);
     if (!valid.success) {
